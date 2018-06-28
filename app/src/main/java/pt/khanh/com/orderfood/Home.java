@@ -26,6 +26,7 @@ import com.squareup.picasso.Picasso;
 import pt.khanh.com.orderfood.Common.Common;
 import pt.khanh.com.orderfood.Interface.ItemClickListener;
 import pt.khanh.com.orderfood.Model.Category;
+import pt.khanh.com.orderfood.Model.Order;
 import pt.khanh.com.orderfood.ViewHolder.MenuViewHolder;
 
 public class Home extends AppCompatActivity
@@ -50,15 +51,6 @@ public class Home extends AppCompatActivity
         //init firebase
         database = FirebaseDatabase.getInstance();
         category = database.getReference("Category");
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -124,15 +116,7 @@ public class Home extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -146,11 +130,15 @@ public class Home extends AppCompatActivity
         if (id == R.id.nav_menu) {
             // Handle the camera action
         } else if (id == R.id.nav_cart) {
-
+            Intent intentCart = new Intent(Home.this, Cart.class);
+            startActivity(intentCart);
         } else if (id == R.id.nav_order) {
-
+            Intent intentOrder = new Intent(Home.this, OrderStatus.class);
+            startActivity(intentOrder);
         } else if (id == R.id.nav_log_out) {
-
+            Intent intentLogout = new Intent(Home.this, SignIn.class);
+            intentLogout.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intentLogout);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

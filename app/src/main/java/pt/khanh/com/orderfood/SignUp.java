@@ -43,11 +43,10 @@ public class SignUp extends AppCompatActivity {
                 table_user.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.child(edtPhone.getText().toString()).exists()){
+                        if (dataSnapshot.child(edtPhone.getText().toString()).exists()) {
                             dialog.dismiss();
                             Toast.makeText(SignUp.this, "Phone Number is registered !", Toast.LENGTH_SHORT).show();
-                        }
-                        else{
+                        } else {
                             dialog.dismiss();
                             User user = new User(edtName.getText().toString(), edtPassword.getText().toString());
                             table_user.child(edtPhone.getText().toString()).setValue(user);

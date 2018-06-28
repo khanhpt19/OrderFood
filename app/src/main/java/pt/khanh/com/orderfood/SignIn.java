@@ -2,6 +2,7 @@ package pt.khanh.com.orderfood;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,7 @@ import pt.khanh.com.orderfood.Model.User;
 public class SignIn extends AppCompatActivity {
     MaterialEditText edtPhone, edtPassword;
     Button btnSignIn;
+    String pref_signin = "sign_in";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,20 +46,20 @@ public class SignIn extends AppCompatActivity {
                 table_user.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.child(edtPhone.getText().toString()).exists()) {
+                        if (dataSnapshot.child(edtPhone.getText().toString()).exists()) {
                             dialog.dismiss();
                             User user = dataSnapshot.child(edtPhone.getText().toString()).getValue(User.class);
+                            user.setPhone(edtPhone.getText().toString());
                             if (user.getPassword().equals(edtPassword.getText().toString())) {
+                                savingUser(user.getPhone(), user.getPassword());
                                 Intent homeIntent = new Intent(SignIn.this, Home.class);
                                 Common.currentUser = user;
                                 startActivity(homeIntent);
                                 finish();
-
                             } else {
                                 Toast.makeText(SignIn.this, "Wrong password !", Toast.LENGTH_SHORT).show();
                             }
-                        }
-                        else{
+                        } else {
                             dialog.dismiss();
                             Toast.makeText(SignIn.this, "User not exist in database !", Toast.LENGTH_SHORT).show();
                         }
@@ -70,5 +72,13 @@ public class SignIn extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private void savingUser(String phone, String password) {
+        SharedPreferences preferences = getSharedPreferences(pref_signin, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("phone", phone);
+        editor.putString("password", password);
+        editor.commit();
     }
 }
